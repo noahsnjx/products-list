@@ -1,0 +1,163 @@
+openapi: 3.0.1
+info:
+  title: A getting started API.
+  version: 1.0.0
+servers:
+  - url: /v1
+paths:
+  /login:
+    post:
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+        required: true
+      responses:
+        "201":
+          description: The login
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+      security: []
+  /products:
+    #GET -------------------------------------
+    get:
+      operationId: getProducts
+      parameters:
+        - name: name
+          in: query
+          description: The product name
+          schema:
+            type: string
+      responses:
+        default:
+          description: reutnr products
+          content:
+            "*/*":
+              schema:
+                type: object
+      tags:
+        - Products
+    #POST ---------------------------------------
+    post:
+      description: create a product
+      operationId: postProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - category
+                - name
+              properties:
+                category:
+                  type: string
+                  format: uuid
+                name:
+                  type: string
+                price:
+                  type: number
+                  format: double
+                  default: 0.0
+                stocked:
+                  type: boolean
+                  default: true
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+          description: OK
+      tags:
+        - Products
+    #DELETE ---------------------
+  /products/{id}:
+    delete:
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        "200":
+          content: {}
+          description: OK
+      tags:
+        - Products
+components:
+  schemas:
+    #USER
+    User:
+      required:
+        - id
+        - username
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+    #GET
+    Product:
+      required:
+        - id
+        - category
+        - name
+        - price
+        - stocked
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          $ref: "#/components/schemas/Category"
+        name:
+          type: string
+          description: The name of the product.
+        price:
+          type: number
+          format: double
+        stocked:
+          type: boolean
+          description: The stockage of the product.
+    Category:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+x-original-swagger-version: "2.0"
