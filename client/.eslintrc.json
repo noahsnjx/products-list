@@ -24,11 +24,7 @@
     "plugin:jest/recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "@typescript-eslint",
-    "jest",
-    "import"
-  ],
+  "plugins": ["@typescript-eslint", "jest", "import"],
   "rules": {
     "react/jsx-filename-extension": "off",
     "linebreak-style": "off",
@@ -38,6 +34,7 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    "react-hooks/exhaustive-deps": "off"
   }
 }
